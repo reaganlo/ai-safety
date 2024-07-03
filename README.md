@@ -5,9 +5,11 @@ Proof of concept to determine the best options for implementing guardrails for l
 - Does not involve fine tuning of models.
 - Must be run locally and offline.
 - Low latency
+  - Less than 0.5 seconds
 - Accuracy?
   - False positives can lead to the app's unusability and missing information.
   - False Negatives can lead to vulnerabilities.
+- Low memory footprint
 
 ## Key Validators
 - Profanity and toxic content
@@ -18,23 +20,5 @@ Proof of concept to determine the best options for implementing guardrails for l
 - Hallucination?
 
 ## Popular guardrails packages
-- Guardrails AI (https://github.com/guardrails-ai/guardrails.git)
-- NeMo-Guardrails by Nvidia (https://github.com/NVIDIA/NeMo-Guardrails.git)
-
-The current package of choice is **Guardrails AI**.
-
-## Build demo
-
-```
-python -m venv venv
-venv\Scripts\activate.bat
-setup.bat
-```
-## Run demo
-
-```
-streamlit run app.py
-```
-
-## Challenges
-- Currently there are no options to detect Prompt Injection locally.
+- [Guardrails-AI] (guardrails-ai/README.md)
+- [NeMo-Guardrails] (nemo-guardrails/README.md)
