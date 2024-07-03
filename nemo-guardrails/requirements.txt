@@ -2,3 +2,4 @@ python-dotenv
 streamlit
 nemoguardrails
 openai
+huggingface-hub[cli]

@@ -1,5 +1,5 @@
 # Guardrails for local LLMs
-Proof of concept to determine the best options for implementing guardrails for locally run LLMs.
+Evaluate the options for implementing guardrails for locally run LLMs.
 
 ## Design Requirements
 - Does not involve fine tuning of models.
@@ -19,6 +19,6 @@ Proof of concept to determine the best options for implementing guardrails for l
 - Prompt Injection
 - Hallucination?
 
-## Popular guardrails packages
+## Current Evaluations
 - [Guardrails-AI] (guardrails-ai/README.md)
 - [NeMo-Guardrails] (nemo-guardrails/README.md)

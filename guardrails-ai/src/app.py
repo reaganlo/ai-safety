@@ -6,30 +6,33 @@ import pandas as pd
 def main():
     st.set_page_config(layout="wide")
     st.header("Guardrails using guardrails-ai")
-    tab1, tab2 = st.tabs(["Validation Playground", "Batch Validation"])
+    tab1, tab2 = st.tabs(["Playground", "Batch Evaluation"])
     with tab1:
-        option = st.selectbox("Validation Type:", (common.VALIDATION_TYPES))
+        option = st.selectbox("Select Guard Type:", (common.GUARD_TYPES))
         user_prompt = st.text_area("Enter the text to be validated:")
-        if st.button("Validate", key="validate_button"):
+        if st.button("Validate"):
             with st.spinner("Validating..."):
                 msg, exec_time = common.validate(option, user_prompt)
                 if msg == "":
                     st.success("pass")
                     st.info(f"Execution time (sec): {exec_time}")
                 else:
-                    st.success("fail")
-                    st.info(f"Execution time (sec): {exec_time}")
+                    st.success("block")
                     st.info(msg)
+                    st.info(f"Execution time (sec): {exec_time}")
     with tab2:
-        if st.button("Batch Validate", key="batch_validate_button"):
+        st.write(
+            "Click the button to evaluate the prompts in the **prompts.csv** file."
+        )
+        if st.button("Batch Evaluate"):
             prompt_file = "prompts.csv"
             df = pd.read_csv(prompt_file)
             total_prompts = df.shape[0]
 
             with st.spinner(
-                f"Validating {total_prompts} prompts from {prompt_file}. Please wait..."
+                f"Evaluating {total_prompts} prompts from {prompt_file}. Please wait..."
             ):
-                correct_results = 0
+                correct_results, total_time = 0, 0.0
                 df["actual_result"] = ""
                 for _, row in df.iterrows():
                     user_prompt = str(row[0])
@@ -38,13 +41,17 @@ def main():
                     if msg == "":
                         actual_result = "pass"
                     else:
-                        actual_result = "fail"
+                        actual_result = "block"
                     df.at[_, "actual_result"] = actual_result
-                    if actual_result == expected_result:
+                    df.at[_, "exec_time"] = exec_time
+                    if actual_result.lower() == expected_result.lower():
                         correct_results += 1
+                    total_time += exec_time
                 st.write(df)
                 correct_percentage = (correct_results / total_prompts) * 100
-                st.info(f"Correct %: {correct_percentage}")
+                avg_time = total_time / total_prompts
+                st.info(f"**Accuracy (%)**: {correct_percentage}")
+                st.info(f"**Avg Time (sec)**: {avg_time}")
 
 
 if __name__ == "__main__":
