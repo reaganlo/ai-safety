@@ -3,14 +3,16 @@ You can find more details at https://github.com/NVIDIA/NeMo-Guardrails.git
 
 ## Build and Run the guardrails app
 - Install Visual Studio C++ Build Tools (https://visualstudio.microsoft.com/visual-cpp-build-tools/).
-- Currently requires OPENAI_API_KEY stored in a `.env` file.
+- Currently requires OPENAI_API_KEY stored in a `.env` file or explicitly set as an environment variable.
 - In Windows CommandPrompt, run the following from the repo root directory:
 ```
 cd nemo-guardrails
 python -m venv venv
 venv\Scripts\activate.bat
 setup.bat
-python src\main.py
+python src\input_rails.py
+python src\rag.py
+nemoguardrails chat --config=config
 ```
 
 ## Challenges
