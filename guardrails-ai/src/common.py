@@ -2,18 +2,30 @@ from guardrails import Guard
 from guardrails.hub import ToxicLanguage
 from guardrails.hub import ProfanityFree
 from guardrails.hub import DetectPII
-import time
 
-GUARD_TYPES = ["All", "ToxicLanguage", "ProfanityFree", "DetectPII"]
+import time
+import concurrent.futures
+
+GUARD_TYPES = [
+    "All",
+    "ProfanityFree",
+    "DetectPII",
+    "ToxicLanguage",
+]
 
 
 def validate(guard_type, text):
     msg, total_time = "", 0.0
     if guard_type == "All":
-        for gt in GUARD_TYPES:
-            if gt != "All":
-                msg, exec_time = validate_each(gt, text)
-                total_time += exec_time
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            futures = []
+            for gt in GUARD_TYPES:
+                if gt != "All":
+                    futures.append(executor.submit(validate_each, gt, text))
+            for future in concurrent.futures.as_completed(futures):
+                result = future.result()
+                msg += result[0]
+                total_time += result[1]
                 if msg != "":
                     return msg, total_time
     else:
@@ -27,7 +39,7 @@ def validate_each(guard_type, text):
         guard = Guard().use(
             ToxicLanguage,
             threshold=0.75,
-            validation_method="sentence",
+            validation_method="full",
             on_fail="exception",
         )
     elif guard_type == "ProfanityFree":
