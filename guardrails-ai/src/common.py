@@ -1,5 +1,4 @@
 from guardrails import Guard
-from guardrails.hub import ToxicLanguage
 from guardrails.hub import ProfanityFree
 from guardrails.hub import DetectPII
 
@@ -10,7 +9,6 @@ GUARD_TYPES = [
     "All",
     "ProfanityFree",
     "DetectPII",
-    "ToxicLanguage",
 ]
 
 
@@ -35,14 +33,7 @@ def validate(guard_type, text):
 
 def validate_each(guard_type, text):
     msg, exec_time = "", 0.0
-    if guard_type == "ToxicLanguage":
-        guard = Guard().use(
-            ToxicLanguage,
-            threshold=0.75,
-            validation_method="full",
-            on_fail="exception",
-        )
-    elif guard_type == "ProfanityFree":
+    if guard_type == "ProfanityFree":
         guard = Guard().use(ProfanityFree, on_fail="exception")
     elif guard_type == "DetectPII":
         guard = Guard().use(DetectPII, ["EMAIL_ADDRESS", "PHONE_NUMBER"], "exception")

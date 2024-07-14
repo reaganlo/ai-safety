@@ -14,12 +14,12 @@ def main():
             with st.spinner("Validating..."):
                 msg, exec_time = common.validate(option, user_prompt)
                 if msg == "":
-                    st.success("pass")
-                    st.info(f"Execution time (sec): {exec_time}")
+                    st.success("safe")
+                    st.success(f"Execution time (sec): {exec_time}")
                 else:
-                    st.success("block")
-                    st.info(msg)
-                    st.info(f"Execution time (sec): {exec_time}")
+                    st.error("unsafe")
+                    st.error(msg)
+                    st.error(f"Execution time (sec): {exec_time}")
     with tab2:
         st.write(
             "Click the button to evaluate the prompts in the **prompts.csv** file."
@@ -29,9 +29,7 @@ def main():
             df = pd.read_csv(prompt_file)
             total_prompts = df.shape[0]
 
-            with st.spinner(
-                f"Evaluating {total_prompts} prompts from {prompt_file}. Please wait..."
-            ):
+            with st.spinner(f"Evaluating {total_prompts} prompts. Please wait..."):
                 correct_results, total_time = 0, 0.0
                 df["actual_result"] = ""
                 for _, row in df.iterrows():
@@ -39,9 +37,9 @@ def main():
                     expected_result = str(row[1])
                     msg, exec_time = common.validate("All", user_prompt)
                     if msg == "":
-                        actual_result = "pass"
+                        actual_result = "safe"
                     else:
-                        actual_result = "block"
+                        actual_result = "unsafe"
                     df.at[_, "actual_result"] = actual_result
                     df.at[_, "exec_time"] = exec_time
                     if actual_result.lower() == expected_result.lower():
