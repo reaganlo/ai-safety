@@ -4,30 +4,28 @@ from guardrails.hub import DetectPII
 
 import time
 import concurrent.futures
+import warnings
+
+warnings.filterwarnings("ignore")
 
 GUARD_TYPES = [
-    "All",
     "ProfanityFree",
     "DetectPII",
 ]
 
 
-def validate(guard_type, text):
+def validate(guard_types, text):
     msg, total_time = "", 0.0
-    if guard_type == "All":
-        with concurrent.futures.ThreadPoolExecutor() as executor:
-            futures = []
-            for gt in GUARD_TYPES:
-                if gt != "All":
-                    futures.append(executor.submit(validate_each, gt, text))
-            for future in concurrent.futures.as_completed(futures):
-                result = future.result()
-                msg += result[0]
-                total_time += result[1]
-                if msg != "":
-                    return msg, total_time
-    else:
-        msg, total_time = validate_each(guard_type, text)
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        futures = []
+        for gt in guard_types:
+            futures.append(executor.submit(validate_each, gt, text))
+        for future in concurrent.futures.as_completed(futures):
+            result = future.result()
+            msg += result[0]
+            total_time += result[1]
+            if msg != "":
+                return msg, total_time
     return msg, total_time
 
 

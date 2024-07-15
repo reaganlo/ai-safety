@@ -4,15 +4,16 @@ import pandas as pd
 
 
 def main():
-    st.set_page_config(layout="wide")
     st.header("Guardrails using guardrails-ai")
-    tab1, tab2 = st.tabs(["Playground", "Batch Evaluation"])
+    options = st.multiselect(
+        "**Select Guard Type(s):**", common.GUARD_TYPES, default=common.GUARD_TYPES[0]
+    )
+    tab1, tab2 = st.tabs(["**Playground**", "**Batch Evaluation**"])
     with tab1:
-        option = st.selectbox("Select Guard Type:", (common.GUARD_TYPES))
         user_prompt = st.text_area("Enter the text to be validated:")
         if st.button("Validate"):
             with st.spinner("Validating..."):
-                msg, exec_time = common.validate(option, user_prompt)
+                msg, exec_time = common.validate(options, user_prompt)
                 if msg == "":
                     st.success("safe")
                     st.success(f"Execution time (sec): {exec_time}")
@@ -35,7 +36,7 @@ def main():
                 for _, row in df.iterrows():
                     user_prompt = str(row[0])
                     expected_result = str(row[1])
-                    msg, exec_time = common.validate("All", user_prompt)
+                    msg, exec_time = common.validate(options, user_prompt)
                     if msg == "":
                         actual_result = "safe"
                     else:
