@@ -26,7 +26,7 @@ def main():
             "Click the button to evaluate the prompts in the **prompts.csv** file."
         )
         if st.button("Batch Evaluate"):
-            prompt_file = "prompts.csv"
+            prompt_file = "test_prompts.csv"
             df = pd.read_csv(prompt_file)
             total_prompts = df.shape[0]
 
