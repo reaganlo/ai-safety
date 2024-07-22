@@ -9,7 +9,7 @@ python -m venv venv
 venv\Scripts\activate.bat
 setup.bat
 streamlit run src\app.py
-python src\test_unusual_prompt.py
+python src\test_prompt_injection.py
 ```
 
 ## Key Validators
