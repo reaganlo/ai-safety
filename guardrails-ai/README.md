@@ -25,6 +25,3 @@ python src\test_prompt_injection.py
 - **unsual_prompt** (https://github.com/reaganlo/unusual_prompt.git)
 
     Can be used as a safety system prompt wrapper around the main LLM calls.
-
-## Challenges
-- Currently there are no options to detect Prompt Injection locally.

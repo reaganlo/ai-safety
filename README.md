@@ -22,11 +22,11 @@ Evaluate the options for implementing guardrails for locally run LLMs.
 - Hallucination?
 
 ## Current Evaluations
-- [Guardrails-AI] (guardrails-ai/README.md)
-- [NeMo-Guardrails] (nemo-guardrails/README.md)
+1. [Guardrails-AI](guardrails-ai/README.md)
+2. [NeMo-Guardrails](nemo-guardrails/README.md)
 
 ## Design Recommendation
-1. Use non-LLM, lightweight models from [Guardrails-AI] (guardrails-ai/README.md) to validate the user input and LLM output.
-2. Use system prompt engineering similar to [Safety-System-Prompts] (guardrails-ai/safety_system_prompts.py) to instruct the LLM itself to behave in a safe manner.
+1. Use non-LLM, lightweight models from [Guardrails-AI](guardrails-ai/README.md) to validate the user input and LLM output.
+2. Use system prompt engineering similar to [Safety-System-Prompts](guardrails-ai/safety_system_prompts.py) to instruct the LLM itself to behave in a safe manner.
 
 ![Guardrails Design](https://github.com/reaganlo/guardrails-llm/blob/main/guardrails-design.png?raw=true)
