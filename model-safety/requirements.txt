@@ -1,0 +1,6 @@
+haystack-ai
+datasets
+ollama-haystack
+gradio
+streamlit
+haversine
