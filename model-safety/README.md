@@ -1,16 +1,15 @@
-# RAG Haystack
-Local RAG implementation using Haystack package.
+# MODEL SAFETY
+Evaluate safety of local LLMs.
 
 ## Build
 - Install Ollama from https://ollama.com/download
-- Run the following commands:
+- Clone the repo and `cd` into this directory.
+- Run `setup.bat`
 
-```
-git clone https://github.com/reaganlo/rag-haystack.git
-cd rag-haystack
-setup.bat
+## Run
 
-python src\app_cli.py
-python src\app_gradio.py
-streamlit run src\app_streamlit.py
+- eval_model.py
 ```
+python src\eval_model.py
+```
+This program reads unsafe prompts from the `data` directory and asks the llm to classify if they are safe or unsafe. The output is generated in the `output` directory. Use the `-h (--help)` flag for usage details.

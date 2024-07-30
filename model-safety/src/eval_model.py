@@ -7,6 +7,7 @@ import logger
 
 warnings.filterwarnings("ignore")
 
+
 def main(args):
     df = pd.read_csv(args.prompt_file)
     total_prompts = df.shape[0]
@@ -34,27 +35,28 @@ def main(args):
     os.makedirs(output_path, exist_ok=True)
     OUTPUT_FILE_PATH = os.path.join(output_path, output_file)
 
-
     df.to_csv(OUTPUT_FILE_PATH, index=False)
     print(f"Results saved to {OUTPUT_FILE_PATH}")
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Argument parser")
     parser.add_argument(
-        "-m", "--model",
+        "-m",
+        "--model",
         type=str,
         default="phi3",
         help="Model name (e.g., phi3)",
-    )    
+    )
     parser.add_argument(
-        "-p", "--prompt_file",
+        "-p",
+        "--prompt_file",
         type=str,
-        default="data\harmbench_behaviors_text_all.csv",
+        default="data\harmbench_behaviors_text_small.csv",
         help="CSV file containing prompts",
     )
     args = parser.parse_args()
-    print(f"Model: {args.model}")    
+    print(f"Model: {args.model}")
     print(f"Prompt file: {args.prompt_file}")
-
 
     main(args)
