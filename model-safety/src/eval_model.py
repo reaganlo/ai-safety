@@ -4,6 +4,7 @@ import pandas as pd
 import safety
 import warnings
 import logger
+from logger import logging
 
 warnings.filterwarnings("ignore")
 
@@ -30,7 +31,7 @@ def main(args):
     print(f"Accuracy (%): {correct_percentage}")
     print(f"Avg response time (sec): {avg_time}")
 
-    output_file = f"{logger.RUN_TS}.csv"
+    output_file = f"{args.model}_{logger.RUN_TS}.csv"
     output_path = os.path.join(os.getcwd(), "output")
     os.makedirs(output_path, exist_ok=True)
     OUTPUT_FILE_PATH = os.path.join(output_path, output_file)
@@ -55,8 +56,28 @@ if __name__ == "__main__":
         default="data\harmbench_behaviors_text_small.csv",
         help="CSV file containing prompts",
     )
+
+    parser.add_argument(
+        "-l",
+        "--log_level",
+        type=str,
+        default="info",
+        help="Log levels: debug, info, warning, error, critical",
+    )
+
     args = parser.parse_args()
-    print(f"Model: {args.model}")
-    print(f"Prompt file: {args.prompt_file}")
+    logger.set_logger(prefix=args.model, log_level=args.log_level)
+
+    msg = f"Model: {args.model}"
+    logging.info(msg)
+    print(msg)
+
+    msg = f"Prompt file: {args.prompt_file}"
+    logging.info(msg)
+    print(msg)
+
+    msg = f"Log level: {args.log_level}"
+    logging.info(msg)
+    print(msg)
 
     main(args)

@@ -49,11 +49,10 @@ def check_safety(model, user_prompt):
         "stream": False,
     }
 
-    logging.info(user_prompt)
     try:
         response = requests.post("http://localhost:11434/api/chat", json=payload)
         res = json.loads(response.json()["message"]["content"])
-        logging.info(res)
+        logging.debug(f"{user_prompt}\n{res}")
 
         # Use Pydantic model for validation
         check_safety_result = CheckSafety(**res)
@@ -63,7 +62,7 @@ def check_safety(model, user_prompt):
         else:
             status = "safe"
     except Exception as e:
-        logging.exception(e)
+        logging.exception(f"{user_prompt}\n{e}")
         status = "exception"
 
     end_time = time.time()
