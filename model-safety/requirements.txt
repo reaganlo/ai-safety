@@ -1,2 +1,4 @@
 haystack-ai
 ollama-haystack
+streamlit
+matplotlib
