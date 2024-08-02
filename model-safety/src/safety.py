@@ -63,7 +63,7 @@ def check_safety(model, user_prompt):
             status = "safe"
     except Exception as e:
         logging.exception(f"{user_prompt}\n{e}")
-        status = "exception"
+        status = "unknown"
 
     end_time = time.time()
     exec_time = round(end_time - start_time, 2)
