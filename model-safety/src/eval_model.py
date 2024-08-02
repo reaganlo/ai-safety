@@ -19,7 +19,7 @@ def main(args):
     for idx, row in df.iterrows():
         user_prompt = str(row[0])
         expected_result = str(row[1])
-        actual_result, exec_time = safety.check_safety(args.model, user_prompt)
+        actual_result, exec_time = safety.check_safety(args.model, user_prompt, 0)
         df.at[idx, "actual_result"] = actual_result
         df.at[idx, "exec_time"] = exec_time
         if actual_result.lower() == expected_result.lower():

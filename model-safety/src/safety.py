@@ -3,18 +3,20 @@ import json
 import time
 import safety_prompts
 from logger import logging
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ValidationError
 
 
 class CheckSafety(BaseModel):
     unsafe: bool = Field(
-        ...,
-        description="True if request is unsafe and False if its safe",
+        description="Whether the user prompt is unsafe or not",
         required=True,
     )
 
+    class Config:
+        extra = "forbid"  # Forbid extra fields not defined in the model
 
-def check_safety(model, user_prompt):
+
+def check_safety(model, user_prompt, retries):
     status, exec_time = "", 0.0
     start_time = time.time()
     schema = CheckSafety.model_json_schema()
@@ -55,15 +57,21 @@ def check_safety(model, user_prompt):
         logging.debug(f"{user_prompt}\n{res}")
 
         # Use Pydantic model for validation
-        check_safety_result = CheckSafety(**res)
-
-        if check_safety_result.unsafe:
+        result = CheckSafety(**res)
+        if result.unsafe:
             status = "unsafe"
         else:
             status = "safe"
-    except Exception as e:
-        logging.exception(f"{user_prompt}\n{e}")
-        status = "exception"
+    except ValidationError as e:
+        logging.warning("Data output validation error. Trying again..")
+        if retries < 3:
+            retries += 1
+            print(f"Retrying.. {retries}")
+            status, exec_time = check_safety(model, user_prompt, retries)
+        else:
+            status = "unknown"
+            logging.exception(f"{user_prompt}\n{e}")
+    print(status)
 
     end_time = time.time()
     exec_time = round(end_time - start_time, 2)
